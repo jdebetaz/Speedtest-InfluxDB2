@@ -1,0 +1,25 @@
+{
+  "name": "speedtest-influxdb2",
+  "version": "1.0.0",
+  "description": "Speedtest.net Collector For InfluxDB2 and Grafana",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jdebetaz/Speedtest-InfluxDB2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jdebetaz/Speedtest-InfluxDB2/issues"
+  },
+  "homepage": "https://github.com/jdebetaz/Speedtest-InfluxDB2#readme",
+  "dependencies": {
+    "@influxdata/influxdb-client": "^1.33.0",
+    "dotenv": "^16.0.3",
+    "node-schedule": "^2.1.0"
+  }
+}
