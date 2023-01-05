@@ -1,10 +1,8 @@
-FROM python:alpine
+FROM node:latest
 
-VOLUME /src/
-COPY influxspeedtest.py requirements.txt config.ini /src/
-ADD influxspeedtest /src/influxspeedtest
-WORKDIR /src
+#Install speedtest-cli
+RUN apt-get install curl
+RUN curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | bash
+RUN apt-get install speedtest
 
-RUN pip install -r requirements.txt
-
-CMD ["python", "-u", "/src/influxspeedtest.py"]
+WORKDIR /home/node/app

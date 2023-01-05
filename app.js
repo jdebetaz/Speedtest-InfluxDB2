@@ -1,22 +1,26 @@
 require('dotenv').config();
 
-// TODO: Find speedtest-cli module
+const util = require('node:util');
+const exec = util.promisify(require('node:child_process').exec);
 
 const schedule = require('node-schedule');
 const { InfluxDB, Point } = require('@influxdata/influxdb-client')
 
 function writeData(data) {
-    const influx = new InfluxDB({ url: 'http://localhost:808', token })
-    const writeApi = influx.getWriteApi('my-org', 'my-bucket')
+    const influx = new InfluxDB({ url: process.env.INFLUX_HOST, token: process.env.INFLUX_TOKEN })
+    const writeApi = influx.getWriteApi(process.env.INFLUX_ORG, process.env.INFLUX_BUCKET)
+
+    console.log(`Download: ${Math.round(data.download.bytes/1000000)}Mbps - Upload: ${Math.round(data.upload.bytes/1000000)}Mbps - Latency: ${data.ping.latency}ms`)
 
     const measurement = new Point('speedtest')
-        .tag('host', 'server01')
-        .floatField('download', data.download)
-        .floatField('upload', data.upload)
-        .floatField('ping', data.ping)
-        .intField('packetLoss', data.packetLoss)
+        .tag('server', data.server.id)
+        .tag('server_name', data.server.name)
+        .tag('server_country', data.server.country)
+        .floatField('download', data.download.bytes)
+        .floatField('upload', data.upload.bytes)
+        .floatField('ping', data.ping.latency)
+        .stringField('link', data.result.url)
         .timestamp(new Date(data.timestamp));
-
     writeApi.writePoint(measurement);
     writeApi.close();
 }
@@ -24,8 +28,9 @@ function writeData(data) {
 function worker() {
     (async () => {
         try {
-            const result = await SpeedTest({ acceptGdpr: true, acceptLicense: true });
-            console.log(result);
+            const { stdout, stderr } = await exec('speedtest --accept-license --accept-gdpr --format=json');
+            const result = JSON.parse(stdout);
+            writeData(result);
         } catch (e) {
             console.error(e);
         }
@@ -34,7 +39,8 @@ function worker() {
 
 
 function bootstrap() {
-    const job = schedule.scheduleJob('*/15 * * * *', worker);
+    setInterval(worker, 1000 * 60 * process.env.APP_INTERVAL);
+    worker();
 }
 
 bootstrap();

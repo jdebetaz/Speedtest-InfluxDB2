@@ -4,7 +4,8 @@
   "description": "Speedtest.net Collector For InfluxDB2 and Grafana",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node app.js"
   },
   "repository": {
     "type": "git",

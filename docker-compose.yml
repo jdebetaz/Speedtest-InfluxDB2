@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+    influx2:
+        image: influxdb:2.6-alpine
+        ports:
+            - 8086:8086
+        volumes:
+            - ./docker/influx:/var/lib/influxdb2
+
+    grafana:
+        image: grafana/grafana:8.3.2
+        ports:
+            - 3000:3000
+        volumes:
+            - ./docker/grafana:/var/lib/grafana
+        depends_on:
+            - influx2
+
+    node:
+        build:
+            context: .
+        working_dir: /home/node/app
+        volumes:
+            - .:/home/node/app
+        depends_on:
+            - influx2
+        command: npm run dev
