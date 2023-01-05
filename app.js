@@ -2,8 +2,6 @@ require('dotenv').config();
 
 const util = require('node:util');
 const exec = util.promisify(require('node:child_process').exec);
-
-const schedule = require('node-schedule');
 const { InfluxDB, Point } = require('@influxdata/influxdb-client')
 
 function writeData(data) {
@@ -27,6 +25,7 @@ function writeData(data) {
 
 function worker() {
     (async () => {
+        console.log('Running speedtest...');
         try {
             const { stdout, stderr } = await exec('speedtest --accept-license --accept-gdpr --format=json');
             const result = JSON.parse(stdout);
@@ -34,6 +33,7 @@ function worker() {
         } catch (e) {
             console.error(e);
         }
+        console.log(`Next run in ${process.env.APP_INTERVAL} minutes.`)
     })();
 }
 
