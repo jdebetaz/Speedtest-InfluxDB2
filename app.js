@@ -31,7 +31,7 @@ function worker() {
             const result = JSON.parse(stdout);
             writeData(result);
         } catch (e) {
-            console.error(e);
+            console.error(e.message);
         }
         console.log(`Next run in ${process.env.APP_INTERVAL} minutes.`)
     })();
@@ -43,4 +43,4 @@ function bootstrap() {
     worker();
 }
 
-bootstrap();
+setTimeout(bootstrap, 1000 * 60);

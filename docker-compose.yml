@@ -19,9 +19,5 @@ services:
     node:
         build:
             context: .
-        working_dir: /home/node/app
-        volumes:
-            - .:/home/node/app
         depends_on:
             - influx2
-        command: npm run dev

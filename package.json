@@ -20,7 +20,6 @@
   "homepage": "https://github.com/jdebetaz/Speedtest-InfluxDB2#readme",
   "dependencies": {
     "@influxdata/influxdb-client": "^1.33.0",
-    "dotenv": "^16.0.3",
-    "node-schedule": "^2.1.0"
+    "dotenv": "^16.0.3"
   }
 }
