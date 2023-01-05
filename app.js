@@ -8,7 +8,7 @@ function writeData(data) {
     const influx = new InfluxDB({ url: process.env.INFLUX_HOST, token: process.env.INFLUX_TOKEN })
     const writeApi = influx.getWriteApi(process.env.INFLUX_ORG, process.env.INFLUX_BUCKET)
 
-    console.log(`Download: ${Math.round(data.download.bytes/1000000)}Mbps - Upload: ${Math.round(data.upload.bytes/1000000)}Mbps - Latency: ${data.ping.latency}ms`)
+    console.log(`Download: ${Math.round(data.download.bytes/125000)}Mbps - Upload: ${Math.round(data.upload.bytes/125000)}Mbps - Latency: ${data.ping.latency}ms`)
 
     const measurement = new Point('speedtest')
         .tag('server', data.server.id)
