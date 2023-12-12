@@ -16,8 +16,14 @@ services:
         depends_on:
             - influx2
 
-    node:
+    worker:
         build:
             context: .
         depends_on:
             - influx2
+        environment:
+            APP_INTERVAL: 2
+            INFLUX_HOST: "http://influx2:8086"
+            INFLUX_TOKEN: "dri9PNEXl-NMvD6rOsv_i8A1ZnJB89pjep3hIOZVvBUAWV7I-GmObnckoLk-Ba5Qst0YDXS682dsclj9Xspq0g=="
+            INFLUX_ORG: "admin"
+            INFLUX_BUCKET: "speedtest"

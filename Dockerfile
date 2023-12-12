@@ -1,4 +1,4 @@
-FROM node:latest
+FROM golang:latest
 
 #Install speedtest-cli
 RUN apt-get install curl
@@ -6,8 +6,16 @@ RUN curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/scr
 RUN apt-get install speedtest
 
 # Setup application
-WORKDIR /home/node/app
-COPY package*.json ./
-COPY app.js ./
-RUN npm install
-CMD [ "npm", "run", "dev" ]
+RUN mkdir -p /go/src/app
+WORKDIR /go/src/app
+COPY . /go/src/app
+
+# Install dependencies
+RUN go get -d -v ./...
+RUN go install -v ./...
+
+# Build the application
+RUN go build -o speedtest-influx .
+
+# Run the application
+CMD ["./speedtest-influx"]
