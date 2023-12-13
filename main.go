@@ -134,10 +134,16 @@ func worker() {
 }
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	// check if .env file exists
+	fileInfo, existsErr := os.Stat('.env')
+	if existsErr == nil {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
 	}
+
+	
 	wait, err := strconv.ParseInt(os.Getenv("APP_INTERVAL"), 10, 0)
 	if err != nil {
 		log.Fatal(err)
